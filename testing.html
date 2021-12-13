@@ -2,13 +2,25 @@
   <html>
    <head>
     <title>Neopixel control</title>
-     <meta name='mobile-web-app-capable' content='yes' />
-     <meta name='viewport' content='width=device-width' />
+    <meta name='mobile-web-app-capable' content='yes' />
+    <meta name='viewport' content='width=device-width' />
    </head>
-   <button>
-    <details>
-    <summary>Palette</summary>
-     <iframe srcdoc="
+   <body>
+    <script>
+     function toggleDetails() {
+      var elem = document.getElementById("my_details");
+      if (elem.open == true) {
+       elem.open = false;
+      }
+      else {
+       elem.open = true;
+      }
+     }
+    </script>
+    <button onclick="toggleDetails()">
+     <details id="my_details" onclick="toggleDetails()">
+      <summary>Palette</summary>
+      <iframe srcdoc="
        <body style='margin: 0px; padding: 0px;'>
         <canvas id='colorspace'></canvas>
        </body>
@@ -37,44 +49,45 @@
           if (eventLocked) {
            return;
           }
-         function colourCorrect(v) {
-          return Math.round(1023-(v*v)/64);
-         }
-         var data = ctx.getImageData(clientX, clientY, 1, 1).data;
-         var params = [
-          'r=' + colourCorrect(data[0]),
-          'g=' + colourCorrect(data[1]),
-          'b=' + colourCorrect(data[2])
-          ].join('&');
-         var req = new XMLHttpRequest();
-         req.open('POST', '?' + params, true);
-         req.send();
-         eventLocked = true;
-         req.onreadystatechange = function() {
-          if (req.readyState == 4) {
-           eventLocked = false;
+          function colourCorrect(v) {
+           return Math.round(1023-(v*v)/64);
+          }
+          var data = ctx.getImageData(clientX, clientY, 1, 1).data;
+          var params = [
+           'r=' + colourCorrect(data[0]),
+           'g=' + colourCorrect(data[1]),
+           'b=' + colourCorrect(data[2])
+           ].join('&');
+          var req = new XMLHttpRequest();
+          req.open('POST', '?' + params, true);
+          req.send();
+          eventLocked = true;
+          req.onreadystatechange = function() {
+           if (req.readyState == 4) {
+            eventLocked = false;
+           }
           }
          }
-        }
-        canvas.addEventListener('click', function(event) {
-         handleEvent(event.clientX, event.clientY, true);
-         }, false);
-        canvas.addEventListener('touchmove', function(event) {
-         handleEvent(event.touches[0].clientX, event.touches[0].clientY);
-         }, false);
-        function resizeCanvas() {
-         canvas.width  = window.innerWidth;
-         canvas.height = window.innerHeight;
+         canvas.addEventListener('click', function(event) {
+          handleEvent(event.clientX, event.clientY, true);
+          }, false);
+         canvas.addEventListener('touchmove', function(event) {
+          handleEvent(event.touches[0].clientX, event.touches[0].clientY);
+          }, false);
+         function resizeCanvas() {
+          canvas.width  = window.innerWidth;
+          canvas.height = window.innerHeight;
+          drawCanvas();
+         }
+         window.addEventListener('resize', resizeCanvas, false);
+         resizeCanvas();
          drawCanvas();
-        }
-        window.addEventListener('resize', resizeCanvas, false);
-        resizeCanvas();
-        drawCanvas();
-        document.ontouchmove = function(e) {e.preventDefault()};
-       })();
-      </script>
-     ">
-    </iframe>
-   </details>
-  </button>
- </html>
+         document.ontouchmove = function(e) {e.preventDefault()};
+        })();
+       </script>
+      ">
+      </iframe>
+     </details>
+    </button>
+   </body>
+  </html>
