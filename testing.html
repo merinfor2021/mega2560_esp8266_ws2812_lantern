@@ -56,13 +56,16 @@
            return (255-(Math.floor((colourCorrect(i))/4))).toString(16).padStart(2, '0');
           }
           var data = ctx.getImageData(clientX, clientY, 1, 1).data;
+          var my_r = rgb_to_hex(data[0]);
+          var my_g = rgb_to_hex(data[1]);
+          var my_b = rgb_to_hex(data[2]);
+          var my_r_inv = rgb_to_hex(255-data[0]);
+          var my_g_inv = rgb_to_hex(255-data[1]);
+          var my_b_inv = rgb_to_hex(255-data[2]);
           function drawCoordinates(x,y) {
            var ctx = document.getElementById('colorspace').getContext('2d');
-           var my_r_loc = rgb_to_hex(255-data[0]);
-           var my_g_loc = rgb_to_hex(255-data[1]);
-           var my_b_loc = rgb_to_hex(255-data[2]);
            var pointSize = 3;
-           ctx.fillStyle = '#' + my_r_loc + my_g_loc + my_b_loc;
+           ctx.fillStyle = '#' + my_r_inv + my_g_inv + my_b_inv;
            ctx.beginPath();
            ctx.arc(x, y, pointSize, 0, Math.PI * 2, true);
            ctx.fill();
@@ -70,10 +73,8 @@
           drawCanvas();
           drawCoordinates(clientX, clientY);
           var my_details = parent.document.getElementById('my_details');
-          var my_r = rgb_to_hex(data[0]);
-          var my_g = rgb_to_hex(data[1]);
-          var my_b = rgb_to_hex(data[2]);
           my_details.style.background = '#' + my_r + my_g + my_b;
+          my_details.style.color = '#' + my_r_inv + my_g_inv + my_b_inv;
           var params = [
            'r=' + colourCorrect(data[0]),
            'g=' + colourCorrect(data[1]),
