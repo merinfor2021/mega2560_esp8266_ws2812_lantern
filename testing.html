@@ -3,155 +3,193 @@
    <head>
     <title>Neopixel control</title>
     <meta name='mobile-web-app-capable' content='yes' />
-    <meta name='viewport' content='width=device-width' />
+    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes' />
    </head>
-   <body>
-    <script>
-     function toggleDetails() {
-      var elem = document.getElementById('my_details');
-      if (elem.open == true) {
-       elem.open = false;
+   <body style='width:100%; height:100%;'>
+    <div style='width:100%; height:100%;'>
+     <script>
+      function toggleDetails() {
+       var elem = document.getElementById('my_details');
+       if (elem.open == true) {
+        elem.open = false;
+       }
+       else {
+        elem.open = true;
+       }
       }
-      else {
-       elem.open = true;
+      function updateSummaryColor() {
+       var val_r = document.getElementById('range_r').value;
+       my_r =            (parseInt(val_r, 10 )).toString(16).padStart(2, '0');
+       my_r_inv = (255 - (parseInt(val_r, 10))).toString(16).padStart(2, '0');
+       document.getElementById('text_r').value = my_r;
+       var val_g = document.getElementById('range_g').value;
+       my_g =            (parseInt(val_g, 10 )).toString(16).padStart(2, '0');
+       my_g_inv = (255 - (parseInt(val_g, 10))).toString(16).padStart(2, '0');
+       document.getElementById('text_g').value = my_g;
+       var val_b = document.getElementById('range_b').value;
+       my_b =            (parseInt(val_b, 10 )).toString(16).padStart(2, '0');
+       my_b_inv = (255 - (parseInt(val_b, 10))).toString(16).padStart(2, '0');
+       document.getElementById('text_b').value = my_b;
+       var my_details = document.getElementById('my_details');
+       my_details.style.background = '#' + my_r + my_g + my_b;
+       my_details.style.color      = '#' + my_r_inv + my_g_inv + my_b_inv;
+         var my_debug_background = document.getElementById('my_debug_background');
+         my_debug_background.textContent = '#' + my_r + my_g + my_b;
+         var my_debug_color =      document.getElementById('my_debug_color');
+         my_debug_color.textContent      = '#' + my_r_inv + my_g_inv + my_b_inv;
       }
-     }
-     function updateSummaryColor() {
-      var val_r = document.getElementById('range_r').value;
-      my_r =            (parseInt(val_r, 10 )).toString(16).padStart(2, '0');
-      my_r_inv = (255 - (parseInt(val_r, 10))).toString(16).padStart(2, '0');
-      var val_g = document.getElementById('range_g').value;
-      my_g =            (parseInt(val_g, 10 )).toString(16).padStart(2, '0');
-      my_g_inv = (255 - (parseInt(val_g, 10))).toString(16).padStart(2, '0');
-      var val_b = document.getElementById('range_b').value;
-      my_b =            (parseInt(val_b, 10 )).toString(16).padStart(2, '0');
-      my_b_inv = (255 - (parseInt(val_b, 10))).toString(16).padStart(2, '0');
-      var my_details = document.getElementById('my_details');
-      my_details.style.background = '#' + my_r + my_g + my_b;
-      my_details.style.color = '#' + my_r_inv + my_g_inv + my_b_inv;
-        var my_debug_background = document.getElementById('my_debug_background');
-        my_debug_background.textContent = '#' + my_r + my_g + my_b;
-        var my_debug_color = document.getElementById('my_debug_color');
-        my_debug_color.textContent = '#' + my_r_inv + my_g_inv + my_b_inv;
-     }
-    </script>
-    <button id='my_toggler' onclick='toggleDetails()'>
-     <details id='my_details' onclick='toggleDetails()'>
-      <summary id='my_summary'>Palette</summary>
-      <iframe srcdoc="
-       <body style='margin: 0px; padding: 0px;'>
-        <canvas id='colorspace'></canvas>
-       </body>
-       <script type='text/javascript'>
-        (function () {
-         var canvas = document.getElementById('colorspace');
-         var ctx = canvas.getContext('2d');
-         function drawCanvas() {
-          var colours = ctx.createLinearGradient(0, 0, window.innerWidth, 0);
-          for (var i=0; i <= 360; i+=10) {
-           colours.addColorStop(i/360, 'hsl(' + i + ', 100%, 50%)');
+      function changedText_r() {
+       var range_r = document.getElementById('range_r');
+       var text_r  = document.getElementById('text_r');
+       range_r.value = parseInt(text_r.value, 16);
+       updateSummaryColor();
+      }
+      function changedText_g() {
+       var range_g = document.getElementById('range_g');
+       var text_g  = document.getElementById('text_g');
+       range_g.value = parseInt(text_g.value, 16);
+       updateSummaryColor();
+      }
+      function changedText_b() {
+       var range_b = document.getElementById('range_b');
+       var text_b  = document.getElementById('text_b');
+       range_b.value = parseInt(text_b.value, 16);
+       updateSummaryColor();
+      }
+      // window.onload = updateSummaryColor;
+     </script>
+     <button id='my_toggler' onclick='toggleDetails()' style='width:95%; height:100%;'>
+      <details id='my_details' onclick='toggleDetails()' style='width:100%; height:100%; background:#ffffff; color:#000000; font-family: "Courier New", Courier, monospace; font-weight:bold;'>
+       <summary id='my_summary'>Palette</summary>
+       <iframe style='width:100%; height:100%;' srcdoc="
+        <body style='margin: 0px; padding: 0px;' style='width:100%; height:100%;'>
+         <canvas id='colorspace' style='width:100%;'></canvas>
+        </body>
+        <script type='text/javascript'>
+         (function () {
+          var canvas = document.getElementById('colorspace');
+          var ctx = canvas.getContext('2d');
+          function drawCanvas() {
+           var colours = ctx.createLinearGradient(0, 0, window.innerWidth, 0);
+           for (var i=0; i <= 360; i+=10) {
+            colours.addColorStop(i/360, 'hsl(' + i + ', 100%, 50%)');
+           }
+           ctx.fillStyle = colours;
+           ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+           var luminance = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+           luminance.addColorStop(0,    '#ffffff');
+           luminance.addColorStop(0.05, '#ffffff');
+           luminance.addColorStop(0.5,  'rgba(0,0,0,0)');
+           luminance.addColorStop(0.95, '#000000');
+           luminance.addColorStop(1,    '#000000');
+           ctx.fillStyle = luminance;
+           ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
           }
-          ctx.fillStyle = colours;
-          ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-          var luminance = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
-          luminance.addColorStop(0,    '#ffffff');
-          luminance.addColorStop(0.05, '#ffffff');
-          luminance.addColorStop(0.5,  'rgba(0,0,0,0)');
-          luminance.addColorStop(0.95, '#000000');
-          luminance.addColorStop(1,    '#000000');
-          ctx.fillStyle = luminance;
-          ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-         }
-         var eventLocked = false;
-         function handleEvent(clientX, clientY) {
-          if (eventLocked) {
-           return;
-          }
-          function colourCorrect(v) {
-           return Math.round(1023-(v*v)/64);
-          }
-          var data = ctx.getImageData(clientX, clientY, 1, 1).data;
-          my_r =            (parseInt(data[0], 10 )).toString(16).padStart(2, '0');
-          my_r_inv = (255 - (parseInt(data[0], 10))).toString(16).padStart(2, '0');
-          my_g =            (parseInt(data[1], 10 )).toString(16).padStart(2, '0');
-          my_g_inv = (255 - (parseInt(data[1], 10))).toString(16).padStart(2, '0');
-          my_b =            (parseInt(data[2], 10 )).toString(16).padStart(2, '0');
-          my_b_inv = (255 - (parseInt(data[2], 10))).toString(16).padStart(2, '0');
-          function drawCoordinates(x,y) {
-           var ctx = document.getElementById('colorspace').getContext('2d');
-           var pointSize = 3;
-           ctx.fillStyle = '#' + my_r_inv + my_g_inv + my_b_inv;
-           ctx.beginPath();
-           ctx.arc(x, y, pointSize, 0, Math.PI * 2, true);
-           ctx.fill();
-          }
-          drawCanvas();
-          drawCoordinates(clientX, clientY);
-          var my_details = parent.document.getElementById('my_details');
-          my_details.style.background = '#' + my_r + my_g + my_b;
-          my_details.style.color = '#' + my_r_inv + my_g_inv + my_b_inv;
-          function updateSliders(val_r, val_g, val_b) {
-           parent.document.getElementById('range_r').value = val_r;
-           parent.document.getElementById('range_g').value = val_g;
-           parent.document.getElementById('range_b').value = val_b;
-          }
-          updateSliders(parseInt(data[0], 10 ), parseInt(data[1], 10 ), parseInt(data[2], 10 ));
-            var my_debug_background = parent.document.getElementById('my_debug_background');
-            my_debug_background.textContent = '#' + my_r + my_g + my_b;
-            var my_debug_color = parent.document.getElementById('my_debug_color');
-            my_debug_color.textContent = '#' + my_r_inv + my_g_inv + my_b_inv;
-          var params = [
-           'r=' + colourCorrect(data[0]),
-           'g=' + colourCorrect(data[1]),
-           'b=' + colourCorrect(data[2])
-           ].join('&');
-          var req = new XMLHttpRequest();
-          req.open('POST', '?' + params, true);
-          req.send();
-          eventLocked = true;
-          req.onreadystatechange = function() {
-           if (req.readyState == 4) {
-            eventLocked = false;
+          var eventLocked = false;
+          function handleEvent(clientX, clientY) {
+           if (eventLocked) {
+            return;
+           }
+           function colourCorrect(v) {
+            return Math.round(1023-(v*v)/64);
+           }
+           var data = ctx.getImageData(clientX, clientY, 1, 1).data;
+           my_r =            (parseInt(data[0], 10 )).toString(16).padStart(2, '0');
+           my_r_inv = (255 - (parseInt(data[0], 10))).toString(16).padStart(2, '0');
+           my_g =            (parseInt(data[1], 10 )).toString(16).padStart(2, '0');
+           my_g_inv = (255 - (parseInt(data[1], 10))).toString(16).padStart(2, '0');
+           my_b =            (parseInt(data[2], 10 )).toString(16).padStart(2, '0');
+           my_b_inv = (255 - (parseInt(data[2], 10))).toString(16).padStart(2, '0');
+           function drawCoordinates(x,y) {
+            var ctx = document.getElementById('colorspace').getContext('2d');
+            var pointSize = 3;
+            ctx.fillStyle = '#' + my_r_inv + my_g_inv + my_b_inv;
+            ctx.beginPath();
+            ctx.arc(x, y, pointSize, 0, Math.PI * 2, true);
+            ctx.fill();
+           }
+           drawCanvas();
+           drawCoordinates(clientX, clientY);
+           var my_details = parent.document.getElementById('my_details');
+           my_details.style.background = '#' + my_r + my_g + my_b;
+           my_details.style.color      = '#' + my_r_inv + my_g_inv + my_b_inv;
+           function updateSliders(val_r, val_g, val_b) {
+            parent.document.getElementById('range_r').value = val_r;
+            parent.document.getElementById('text_r').value = (parseInt(val_r, 10 )).toString(16).padStart(2, '0');
+            parent.document.getElementById('range_g').value = val_g;
+            parent.document.getElementById('text_g').value = (parseInt(val_g, 10 )).toString(16).padStart(2, '0');
+            parent.document.getElementById('range_b').value = val_b;
+            parent.document.getElementById('text_b').value = (parseInt(val_b, 10 )).toString(16).padStart(2, '0');
+           }
+           updateSliders(parseInt(data[0], 10 ), parseInt(data[1], 10 ), parseInt(data[2], 10 ));
+             var my_debug_background = parent.document.getElementById('my_debug_background');
+             my_debug_background.textContent = '#' + my_r + my_g + my_b;
+             var my_debug_color = parent.document.getElementById('my_debug_color');
+             my_debug_color.textContent      = '#' + my_r_inv + my_g_inv + my_b_inv;
+           var params = [
+            'r=' + colourCorrect(data[0]),
+            'g=' + colourCorrect(data[1]),
+            'b=' + colourCorrect(data[2])
+            ].join('&');
+           var req = new XMLHttpRequest();
+           req.open('POST', '?' + params, true);
+           req.send();
+           eventLocked = true;
+           req.onreadystatechange = function() {
+            if (req.readyState == 4) {
+             eventLocked = false;
+            }
            }
           }
-         }
-         canvas.addEventListener('click', function(event) {
-          var rect = canvas.getBoundingClientRect();
-          var my_x = event.clientX - rect.left;
-          var my_y = event.clientY - rect.top;
-          handleEvent(my_x, my_y, true);
-          }, false);
-         canvas.addEventListener('touchmove', function(event) {
-          var rect = canvas.getBoundingClientRect();
-          var my_x = event.touches[0].clientX - rect.left;
-          var my_y = event.touches[0].clientY - rect.top;
-          handleEvent(my_x, my_y);
-          }, false);
-         function resizeCanvas() {
-          var rect = canvas.getBoundingClientRect();
-          canvas.width  = window.innerWidth - rect.left;
-          canvas.height = window.innerHeight - rect.top - 4;
+          canvas.addEventListener('click', function(event) {
+           var rect = canvas.getBoundingClientRect();
+           var my_x = event.clientX - rect.left;
+           var my_y = event.clientY - rect.top;
+           handleEvent(my_x, my_y, true);
+           }, false);
+          canvas.addEventListener('touchmove', function(event) {
+           var rect = canvas.getBoundingClientRect();
+           var my_x = event.touches[0].clientX - rect.left;
+           var my_y = event.touches[0].clientY - rect.top;
+           handleEvent(my_x, my_y);
+           }, false);
+          function resizeCanvas() {
+           var rect = canvas.getBoundingClientRect();
+           canvas.width  = window.innerWidth - rect.left;
+           canvas.height = window.innerHeight - rect.top - 4;
+           drawCanvas();
+          }
+          window.addEventListener('resize', resizeCanvas, false);
+          resizeCanvas();
           drawCanvas();
-         }
-         window.addEventListener('resize', resizeCanvas, false);
-         resizeCanvas();
-         drawCanvas();
-         document.ontouchmove = function(e) {e.preventDefault()};
-        })();
-       </script>
-      ">
-      </iframe>
-     </details>
-    </button>
-    <br>
-    <input type='range' id='range_r' name='range_r' min='0' max='255' onchange='updateSummaryColor();'>
-    <br>
-    <input type='range' id='range_g' name='range_g' min='0' max='255' onchange='updateSummaryColor();'>
-    <br>
-    <input type='range' id='range_b' name='range_b' min='0' max='255' onchange='updateSummaryColor();'>
-    <br>
-    <button id='my_debug_background'>my_debug_background</button>
-    <br>
-    <button id='my_debug_color'>my_debug_color</button>
+          document.ontouchmove = function(e) {e.preventDefault()};
+         })();
+        </script>
+       ">
+       </iframe>
+      </details>
+     </button>
+     <br>
+     <div style='background:#ff0000; color:#ff0000;'>
+      <input type='range' id='range_r' name='range_r' min='0' max='255'     value='255' style='width:80%; height:100%;'                                      onchange='updateSummaryColor();'>
+      <input type='text'  id='text_r'  name='text_r' size='2' maxlength='2' value='ff'  style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_r();'>
+      <br>
+     </div>
+     <div style='background:#00ff00; color:#00ff00;'>
+      <input type='range' id='range_g' name='range_g' min='0' max='255'   value='255' style='width:80%; height:100%;'                                        onchange='updateSummaryColor();'>
+      <input type='text'  id='text_g'  name='text_g' size='2' maxlength='2' value='ff'  style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_g();'>
+      <br>
+     </div>
+     <div style='background:#0000ff; color:#0000ff;'>
+      <input type='range' id='range_b' name='range_b' min='0' max='255'     value='255' style='width:80%; height:100%;'                                      onchange='updateSummaryColor();'>
+      <input type='text'  id='text_b'  name='text_b' size='2' maxlength='2' value='ff'  style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_b();'>
+      <br>
+     </div>
+     <div>
+      <button id='my_debug_background' style='font-family: "Courier New", Courier, monospace; font-weight:bold;'>my_debug_background</button>
+      <br>
+      <button id='my_debug_color'      style='font-family: "Courier New", Courier, monospace; font-weight:bold;'>my_debug_color</button>
+     </div>
+    </div>
    </body>
   </html>
