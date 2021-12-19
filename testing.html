@@ -17,6 +17,29 @@
         elem.open = true;
        }
       }
+          var stripLocked = false;
+          function updateStrip(val_r, val_g, val_b) {
+           if (stripLocked) {
+            return;
+           }
+           function colourCorrect(v) {
+            return Math.round(1023-(v*v)/64);
+           }
+           var params = [
+            'r=' + colourCorrect(val_r),
+            'g=' + colourCorrect(val_g),
+            'b=' + colourCorrect(val_b)
+            ].join('&');
+           var req = new XMLHttpRequest();
+           req.open('POST', '?' + params, true);
+           req.send();
+           stripLocked = true;
+           req.onreadystatechange = function() {
+            if (req.readyState == 4) {
+             stripLocked = false;
+            }
+           }
+          }
       function updateSummaryColor() {
        var val_r = document.getElementById('range_r').value;
        my_r =            (parseInt(val_r, 10 )).toString(16).padStart(2, '0');
@@ -37,6 +60,7 @@
          my_debug_background.textContent = '#' + my_r + my_g + my_b;
          var my_debug_color =      document.getElementById('my_debug_color');
          my_debug_color.textContent      = '#' + my_r_inv + my_g_inv + my_b_inv;
+       updateStrip(parseInt(val_r, 10 ), parseInt(val_g, 10 ), parseInt(val_b, 10 ));
       }
       function changedText_r() {
        var range_r = document.getElementById('range_r');
