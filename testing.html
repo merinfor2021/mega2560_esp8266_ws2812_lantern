@@ -53,6 +53,7 @@
        my_b =            (parseInt(val_b, 10 )).toString(16).padStart(2, '0');
        my_b_inv = (255 - (parseInt(val_b, 10))).toString(16).padStart(2, '0');
        document.getElementById('text_b').value = my_b;
+       document.getElementById('text_a').value = my_r + my_g + my_b;
        var my_details = document.getElementById('my_details');
        my_details.style.background = '#' + my_r + my_g + my_b;
        my_details.style.color      = '#' + my_r_inv + my_g_inv + my_b_inv;
@@ -78,6 +79,16 @@
        var range_b = document.getElementById('range_b');
        var text_b  = document.getElementById('text_b');
        range_b.value = parseInt(text_b.value, 16);
+       updateSummaryColor();
+      }
+      function changedText_a() {
+       var range_r = document.getElementById('range_r');
+       var range_g = document.getElementById('range_g');
+       var range_b = document.getElementById('range_b');
+       var text_a  = document.getElementById('text_a');
+       range_r.value = parseInt(text_a.value.substring(0, 2), 16);
+       range_g.value = parseInt(text_a.value.substring(2, 4), 16);
+       range_b.value = parseInt(text_a.value.substring(4, 6), 16);
        updateSummaryColor();
       }
       // window.onload = updateSummaryColor;
@@ -144,6 +155,9 @@
             parent.document.getElementById('text_g').value = (parseInt(val_g, 10 )).toString(16).padStart(2, '0');
             parent.document.getElementById('range_b').value = val_b;
             parent.document.getElementById('text_b').value = (parseInt(val_b, 10 )).toString(16).padStart(2, '0');
+            parent.document.getElementById('text_a').value = parent.document.getElementById('text_r').value +
+                                                             parent.document.getElementById('text_g').value +
+                                                             parent.document.getElementById('text_b').value;
            }
            updateSliders(parseInt(data[0], 10 ), parseInt(data[1], 10 ), parseInt(data[2], 10 ));
              var my_debug_background = parent.document.getElementById('my_debug_background');
@@ -194,19 +208,27 @@
       </details>
      </button>
      <br>
-     <div style='background:#ff0000; color:#ff0000;'>
-      <input type='range' id='range_r' name='range_r' min='0' max='255'     value='255' style='width:80%; height:100%;'                                      onchange='updateSummaryColor();'>
-      <input type='text'  id='text_r'  name='text_r' size='2' maxlength='2' value='ff'  style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_r();'>
+     <div> <!-- <div style='background:#ff0000; color:#ff0000;'> -->
+      <text id='r__' name='r__' style='font-family: "Courier New", Courier, monospace; font-weight:bold; color:#ff0000;'>R</text>
+      <input type='range' id='range_r' name='range_r' min='0' max='255'     value='255'    style='width:80%; height:100%;'                                      onchange='updateSummaryColor();'>
+      <input type='text'  id='text_r'  name='text_r' size='2' maxlength='2' value='ff'     style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_r();'>
       <br>
      </div>
-     <div style='background:#00ff00; color:#00ff00;'>
-      <input type='range' id='range_g' name='range_g' min='0' max='255'   value='255' style='width:80%; height:100%;'                                        onchange='updateSummaryColor();'>
-      <input type='text'  id='text_g'  name='text_g' size='2' maxlength='2' value='ff'  style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_g();'>
+     <div> <!-- <div style='background:#00ff00; color:#00ff00;'> -->
+      <text id='_g_' name='_g_' style='font-family: "Courier New", Courier, monospace; font-weight:bold; color:#00ff00;'>G</text>
+      <input type='range' id='range_g' name='range_g' min='0' max='255'     value='255'    style='width:80%; height:100%;'                                      onchange='updateSummaryColor();'>
+      <input type='text'  id='text_g'  name='text_g' size='2' maxlength='2' value='ff'     style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_g();'>
       <br>
      </div>
-     <div style='background:#0000ff; color:#0000ff;'>
-      <input type='range' id='range_b' name='range_b' min='0' max='255'     value='255' style='width:80%; height:100%;'                                      onchange='updateSummaryColor();'>
-      <input type='text'  id='text_b'  name='text_b' size='2' maxlength='2' value='ff'  style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_b();'>
+     <div> <!-- <div style='background:#0000ff; color:#0000ff;'> -->
+      <text id='__b' name='__b' style='font-family: "Courier New", Courier, monospace; font-weight:bold; color:#0000ff;'>B</text>
+      <input type='range' id='range_b' name='range_b' min='0' max='255'     value='255'    style='width:80%; height:100%;'                                      onchange='updateSummaryColor();'>
+      <input type='text'  id='text_b'  name='text_b' size='2' maxlength='2' value='ff'     style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_b();'>
+      <br>
+     </div>
+     <div>
+      <text id='manual' name='manual' style='font-family: "Courier New", Courier, monospace; font-weight:bold; color:#000000;'>MANUAL </text>
+      <input type='text'  id='text_a'  name='text_a' size='6' maxlength='6' value='ffffff' style='font-family: "Courier New", Courier, monospace; font-weight:bold;' onchange='changedText_a();'>
       <br>
      </div>
      <div>
